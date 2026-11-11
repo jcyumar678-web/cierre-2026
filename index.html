@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head><body>
+<title>Cierre 2026: ¿quién abre la válvula?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Seguimiento semanal, con datos públicos del BCV, de las cinco válvulas que podrían abrir la liquidez en bolívares y en dólares para el cierre de 2026, y tres escenarios hasta marzo de 2027.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Yumar dashboard dark look (single theme by design): header, a row of five valves, one card per signal, three scenarios. */
+:root{
+  --page:#0B132B; --panel:#0F1A36; --hi:#13213F; --line:#1F2C52; --line2:#2A3A66;
+  --ink:#EAF0FA; --ink2:#A7B6D3; --ink3:#7A8BB0;
+  --cyan:#06B6D4; --cyan2:#22D3EE; --amber:#F59E0B; --violet:#9085E9; --rose:#D55181;
+  --ok:#34D399; --warn:#FBBF24; --bad:#F87171;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--ink);font:15px/1.5 var(--sans);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--page)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .wrap{padding-block:22px 6px;display:flex;flex-direction:column;gap:10px}
+h1{font:600 26px/1.15 var(--sans);margin:0;text-wrap:balance}
+.kicker{font:600 12px/1.3 var(--cond);letter-spacing:.1em;text-transform:uppercase;color:var(--cyan2)}
+.lede{color:var(--ink2);max-width:72ch;margin:0;font-size:15.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 11px/1 var(--cond);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:4px;border:1px solid var(--line2);color:var(--ink2)}
+.chip.mod{border-style:dashed;color:var(--ink3)}
+main .wrap{padding-block:14px 40px;display:flex;flex-direction:column;gap:18px}
+h2{font:600 18px/1.3 var(--sans);margin:6px 0 0;text-wrap:balance}
+.lbl{font:600 11px/1.3 var(--cond);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.valves{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.valve{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 13px;display:flex;flex-direction:column;gap:7px;min-width:0;text-decoration:none;color:inherit}
+.valve:hover{border-color:var(--line2);background:var(--hi)}
+.valve .n{font:600 11px/1 var(--mono);color:var(--ink3)}
+.valve .t{font:600 14.5px/1.3 var(--sans);text-wrap:balance}
+.valve .r{font-size:12.5px;color:var(--ink2)}
+.light{display:inline-flex;align-items:center;gap:6px;font:700 11px/1 var(--cond);letter-spacing:.07em;text-transform:uppercase}
+.light i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.q i{background:var(--ink3)} .q{color:var(--ink2)}
+.m i{background:var(--warn)} .m{color:var(--warn)}
+.o i{background:var(--bad)} .o{color:var(--bad)}
+.verdict{background:var(--hi);border:1px solid var(--line2);border-radius:8px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px;align-items:center}
+.verdict .big{font:600 20px/1.3 var(--sans);text-wrap:balance}
+.verdict p{margin:0;color:var(--ink2);font-size:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;scroll-margin-top:16px}
+.card h3{font:600 16px/1.3 var(--sans);margin:0;text-wrap:balance}
+.card h3 .n{font:600 12px/1 var(--mono);color:var(--cyan2);margin-right:6px}
+.card .q{font-size:13px;color:var(--ink3);margin:-6px 0 0}
+.card p{margin:0;color:var(--ink2);font-size:13.5px}
+.wide{grid-column:1/-1}
+.stats{display:flex;flex-wrap:wrap;gap:8px 22px}
+.stat .v{font:500 22px/1.15 var(--mono);font-variant-numeric:tabular-nums}
+.stat .s{font-size:12px;color:var(--ink3)}
+.tag{display:inline-block;font:600 10px/1 var(--cond);letter-spacing:.06em;text-transform:uppercase;padding:3px 5px;border-radius:3px;border:1px dashed var(--ink3);color:var(--ink3);vertical-align:2px;margin-left:4px}
+.tag.sup{border-style:solid;border-color:var(--line2);color:var(--ink2)}
+.tag.pend{border-style:solid;border-color:var(--amber);color:var(--amber)}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--ink3)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink2)}
+.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:3px}
+.legend i.sq{width:10px;height:10px;vertical-align:-1px}
+.note{font-size:12.5px;color:var(--ink3);border-top:1px solid var(--line);padding-top:8px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font:600 11px/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);text-align:right;padding:6px 8px;border-bottom:1px solid var(--line2);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td:first-child{font-family:var(--sans);white-space:normal}
+.scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.sc{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.sc h3{font:600 16px/1.25 var(--sans);margin:0}
+.dials{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;font-size:13px}
+.dials dt{font:600 11px/1.6 var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.dials dd{margin:0;color:var(--ink)}
+.sc p{margin:0;color:var(--ink2);font-size:13px}
+.committee{background:var(--hi);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:10px 14px;font-size:13.5px;color:var(--ink2)}
+.committee b{font:700 11px/1 var(--cond);letter-spacing:.08em;text-transform:uppercase;color:var(--cyan2);display:block;margin-bottom:4px}
+a{color:var(--cyan2)}
+a:focus-visible{outline:2px solid var(--cyan2);outline-offset:2px}
+footer .wrap{padding-block:0 32px;font-size:12px;color:var(--ink3);display:flex;flex-direction:column;gap:6px}
+@media (max-width:980px){.valves{grid-template-columns:repeat(2,minmax(0,1fr))}.valves .valve:last-child{grid-column:1/-1}.scen{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.grid2{grid-template-columns:minmax(0,1fr)}.verdict{grid-template-columns:minmax(0,1fr)}h1{font-size:22px}}
+@media (max-width:420px){.valves{grid-template-columns:minmax(0,1fr)}}
+</style>
+
+<header><div class="wrap">
+  <div class="kicker">Programa Dos Monedas · seguimiento semanal</div>
+  <h1>Cierre 2026: ¿quién abre la válvula?</h1>
+  <p class="lede">Es el primer fin de año en mucho tiempo sin la válvula fiscal: el ingreso petrolero llega por cuentas supervisadas y presupuestos mensuales aprobados. La inflación baja (6,2% en octubre, la menor de 2026), pero el comercio siente que no hay bolívares ni dólares. El dinero no falta: está quieto. La pregunta es quién abre una válvula para diciembre, y a qué precio en enero.</p>
+  <div class="chips"><span class="chip" id="asof"></span><span class="chip">Datos públicos del BCV</span><span class="chip mod">Modelado</span><span class="chip">No es pronóstico ni recomendación</span></div>
+</div></header>
+
+<main><div class="wrap">
+
+<h2>Las cinco válvulas</h2>
+<div class="valves" id="valves"></div>
+
+<section class="verdict" aria-label="Lectura de la semana">
+  <div><div class="lbl">Lectura de la semana</div><div class="big" id="verdict"></div></div>
+  <p id="verdict-p"></p>
+</section>
+
+<h2>¿Dónde estamos entre los escenarios?</h2>
+<div class="grid2">
+  <section class="card" id="brujula">
+    <h3><span class="n">·</span>La brújula: bolívares y dólares</h3>
+    <p class="q">¿Se abren los bolívares, aprieta el lado del dólar, o las dos cosas?</p>
+    <div id="ch-brujula"></div>
+    <div class="legend"><span><i class="sq" style="background:var(--cyan)"></i>Semana (los puntos claros son las anteriores)</span><span><i class="sq" style="background:var(--amber);border-radius:50%"></i>Último día</span></div>
+    <p class="note">Eje horizontal: financiamiento del BCV a las empresas del Estado en 4 semanas, en unidades del «goteo» del modelo (11% de la base al mes); 0 es nada. Eje vertical: presión del lado del dólar, en desvíos sobre lo que el modelo espera en el diciembre austero (una referencia de mercado contra la tasa oficial; restringida, aquí solo como desvío). <span class="tag">Modelado</span></p>
+  </section>
+  <section class="card" id="pesos">
+    <h3><span class="n">·</span>Pesos de los escenarios, semana a semana</h3>
+    <p class="q">¿Cuál de los tres explica mejor lo que se ve?</p>
+    <div class="stats" id="pesos-stats"></div>
+    <div id="ch-pesos"></div>
+    <div class="legend"><span><i class="sq" style="background:var(--ink3)"></i>Diciembre austero</span><span><i class="sq" style="background:var(--amber)"></i>Goteo administrado</span><span><i class="sq" style="background:var(--bad)"></i>Apretón del dólar</span></div>
+    <p class="note" id="pesos-note"></p>
+  </section>
+  <section class="card" id="canal">
+    <h3><span class="n">·</span>La prima del canal entre particulares</h3>
+    <p class="q">¿Cuánto del ensanchamiento es el costo de usar ese canal y no más demanda de dólares?</p>
+    <div class="stats" id="canal-stats"></div>
+    <div id="ch-canal"></div>
+    <div class="legend"><span><i class="sq" style="background:var(--violet)"></i>Diferencia entre el canal entre particulares y una referencia de mercado agregada, puntos sobre su promedio de octubre</span></div>
+    <p class="note">Si la prima sigue ancha mientras la referencia agregada se aplana, el ensanchamiento fue sobre todo el costo del canal bajo presión. Si la prima se cierra y la referencia sigue subiendo, la presión es general. Se muestra solo la diferencia, nunca un nivel. <span class="tag">Modelado</span></p>
+  </section>
+  <section class="card" id="salto">
+    <h3><span class="n">·</span>Presión de salto</h3>
+    <p class="q">¿Qué probabilidad da el modelo a un salto del dólar oficial en el próximo mes?</p>
+    <div class="stats" id="salto-stats"></div>
+    <div id="ch-salto"></div>
+    <p class="note">Probabilidad mensual de un escalón del dólar oficial, según cuánto se aleja el mercado del ritmo oficial (ecuación de riesgo de salto del motor de escenarios, estimada en 2024–2026). Bajo: menos de 15%; medio: 15% a 35%; alto: más de 35%. Es una lectura del modelo, no un pronóstico. <span class="tag">Modelado</span></p>
+  </section>
+</div>
+
+<div class="grid2">
+  <section class="card wide" id="v1">
+    <h3><span class="n">1</span>La puerta de atrás: el BCV le presta a las empresas del Estado</h3>
+    <p class="q">¿Cuántos bolívares mete al mes el sector público en la base monetaria, limpios de reclasificaciones y de sus operaciones en dólares?</p>
+    <div class="stats" id="v1-stats"></div>
+    <div id="ch-v1"></div>
+    <div class="legend"><span><i class="sq" style="background:var(--cyan)"></i>Inyección pública limpia, % de la base en el mes</span><span><i class="sq" style="background:var(--amber)"></i>Diciembre</span></div>
+    <p class="note">Línea 2.1 de la base monetaria semanal (sector público; sobre todo empresas públicas, 2.1.5). En las semanas con un movimiento de 10% de la base o más, se descuenta lo que compensan las cuentas contables del BCV (reclasificación) y las reservas (operación en dólares del Estado). Método «D» del programa, elegido por su capacidad de pronóstico. <span class="tag">Modelado</span></p>
+  </section>
+
+  <section class="card" id="v2">
+    <h3><span class="n">2</span>El BCV suelta el encaje</h3>
+    <p class="q">¿Tienen los bancos más bolívares en el BCV de los que exige el encaje?</p>
+    <div class="stats" id="v2-stats"></div>
+    <div id="ch-v2"></div>
+    <div class="legend"><span><i class="sq" style="background:var(--cyan)"></i>Excedente de encaje, % del requerido · banca universal</span></div>
+    <p class="note">Cuadro 1.2.10 (semanal). Si el BCV baja el encaje de la vista y el ahorro (como hizo con el plazo el 15 sep), el excedente salta esa misma semana y la tasa interbancaria cae. Se vigila también la Gaceta.</p>
+  </section>
+
+  <section class="card" id="v3">
+    <h3><span class="n">3</span>Bonos y aguinaldos del presupuesto aprobado</h3>
+    <p class="q">¿Sube el efectivo en bolívares como en los diciembres anteriores?</p>
+    <div class="stats" id="v3-stats"></div>
+    <div id="ch-v3"></div>
+    <div class="legend" id="v3-leg"></div>
+    <p class="note">Billetes y monedas en circulación (usos de la base, línea 4), índice = 100 en la última semana de octubre de cada año. Los bonos pagados por Patria se ven primero aquí, a mediados de diciembre.</p>
+  </section>
+
+  <section class="card" id="v4">
+    <h3><span class="n">4</span>Más dólares en la mesa cambiaria</h3>
+    <p class="q">¿Vende el BCV más dólares a las empresas por las mesas de los bancos?</p>
+    <div class="stats" id="v4-stats"></div>
+    <div id="ch-v4"></div>
+    <div class="legend"><span><i class="sq" style="background:var(--violet)"></i>Ventas del BCV, US$ MM al mes</span><span><i style="background:var(--amber)"></i>Promedio ene–sep 2026</span><span><i style="background:var(--ink2)"></i>Rango de octubre</span></div>
+    <p class="note">Serie mensual de prensa y del BCV (cifras aproximadas desde julio de 2026) <span class="tag sup">Supuesto</span>. Octubre se muestra como rango, porque las estimaciones difieren: US$ 1.585 MM en esa serie y US$ 1.100–1.250 MM en otra estimación sin fuente pública <span class="tag">Sin verificar</span>; la luz usa el punto medio. Sin fuente semanal pública. Vender dólares retira bolívares: alivia el lado del dólar y aprieta el del bolívar.</p>
+  </section>
+
+  <section class="card" id="v5">
+    <h3><span class="n">5</span>Nadie la abre</h3>
+    <p class="q">Si ninguna válvula se mueve, ¿qué carga la temporada?</p>
+    <p>Remesas, utilidades de las empresas y dólares en efectivo. Se reconoce por lo que no pasa: no salta el efectivo, no salta la puerta de atrás, el encaje no se toca y el M2 real sigue subiendo porque la gente guarda bolívares (en octubre, +9,4% real).</p>
+    <div class="committee"><b>Lo que se juega</b>En 2024 y 2025 diciembre trajo una inyección pública de 14% a 18% de la base, y enero, un salto de precios (32,6% en enero de 2026, mezclado con el choque político del 3 de enero). Un diciembre sin válvula sería, probablemente, un enero sin salto: menos ventas ahora a cambio de desinflación.</div>
+  </section>
+
+  <section class="card wide" id="ritmo">
+    <h3><span class="n">·</span>La señal del BCV: el ritmo que ya puso en sus tasas</h3>
+    <p class="q">Si un depósito en bolívares al piso rinde lo mismo que el título de cobertura del BCV (atado al dólar oficial), ¿qué devaluación oficial están suponiendo?</p>
+    <div class="grid2" style="gap:14px">
+      <div class="tbl"><table id="impl-tbl"></table></div>
+      <div><div id="ch-impl"></div>
+      <div class="legend"><span><i style="background:var(--cyan)"></i>Lo que dice el mercado: plazo a 30 días observado contra el título a 28 días</span><span><i style="background:var(--amber)"></i>Lo que dicen los pisos del BCV (ahorro y plazo)</span><span><i style="background:var(--ink2)"></i>Ritmo oficial de octubre, anualizado</span></div></div>
+    </div>
+    <p class="note">Tasas efectivas: ahorro con capitalización mensual, plazo a 90 días, título a 90 días (6%) y a 28 días (4,5%). Ambas tasas son administradas y el piso es un mínimo: es una lectura de dos precios del BCV, no un pronóstico. <span class="tag">Modelado</span></p>
+  </section>
+
+  <section class="card" id="tasas">
+    <h3><span class="n">·</span>Lo que pagan los bancos, día a día</h3>
+    <p class="q">¿Pagan los bancos el nuevo piso del 1 de noviembre, y algo más?</p>
+    <div id="ch-tasas"></div>
+    <div class="legend"><span><i style="background:var(--cyan)"></i>Plazo a 30 días</span><span><i style="background:var(--violet)"></i>Ahorro</span><span><i style="background:var(--rose)"></i>Cuentas corrientes remuneradas</span><span><i style="background:var(--amber)"></i>Pisos (Res. 26-08-01 y 26-10-01)</span></div>
+    <p class="note" id="tasas-note"></p>
+  </section>
+
+  <section class="card" id="ancla">
+    <h3><span class="n">·</span>El ancla: dólar oficial contra inflación</h3>
+    <p class="q">¿Sube el dólar oficial más o menos que los precios cada mes?</p>
+    <div id="ch-ancla"></div>
+    <div class="legend"><span><i class="sq" style="background:var(--cyan)"></i>Variación del dólar oficial en el mes</span><span><i class="sq" style="background:var(--amber)"></i>Inflación del mes (INPC)</span></div>
+    <p class="note" id="ancla-note"></p>
+  </section>
+</div>
+
+<h2>Tres escenarios, de diciembre de 2026 a marzo de 2027</h2>
+<p class="lede" style="font-size:14px">Cada escenario se define por cuatro perillas; la inflación la completa el motor de escenarios del Programa Dos Monedas. Los valores son supuestos de trabajo <span class="tag sup">Supuesto</span>; la brecha es ilustrativa. Las válvulas de arriba dicen, semana a semana, hacia cuál se inclina el año.</p>
+<div class="scen">
+  <section class="sc" style="--c:var(--ink2)">
+    <h3>Diciembre austero</h3>
+    <dl class="dials"><dt>Bolívares</dt><dd>Sin inyección (válvula 5)</dd><dt>Dólar oficial</dt><dd>Lento, 3–4% al mes, sostenido</dd><dt>Brecha</dt><dd>Estable</dd><dt>Dólares</dt><dd>Escasos, como hoy</dd></dl>
+    <p>Inflación cerca de 4% al mes según el modelo. Diciembre flojo en ventas, cobranza más lenta, inventario comprado para una temporada normal que se queda en el almacén. Enero sin salto.</p>
+  </section>
+  <section class="sc" style="--c:var(--amber)">
+    <h3>Goteo administrado</h3>
+    <dl class="dials"><dt>Bolívares</dt><dd>Se abren a cuentagotas (válvula 1, 2 o 3)</dd><dt>Dólar oficial</dt><dd>Se mantiene lento a propósito: es el ancla</dd><dt>Brecha</dt><dd>Se abre unos puntos</dd><dt>Dólares</dt><dd>Algo más fáciles si se usa la válvula 4</dd></dl>
+    <p>Diciembre con un empujón en bolívares. Lo que sobra no puede ir al dólar oficial, así que va a la brecha y a los precios. Con el ancla sostenida, el modelo casi no mueve la inflación (cerca de 4% al mes): el goteo se ve en la brecha y en el riesgo de un salto, y enero sube muy por debajo de los eneros de 2025 y 2026. El dólar oficial se atrasa más frente a la inflación: las cosas se encarecen en dólares.</p>
+  </section>
+  <section class="sc" style="--c:var(--bad)">
+    <h3>Apretón del dólar</h3>
+    <dl class="dials"><dt>Bolívares</dt><dd>Pocos</dd><dt>Dólar oficial</dt><dd>Presionado a acelerar, 5–8% al mes</dd><dt>Brecha</dt><dd>Se abre mucho</dd><dt>Dólares</dt><dd>Efectivo y pagos entre particulares siguen estrangulados</dd></dl>
+    <p>Los precios en bolívares siguen a la brecha aunque falten bolívares. La inflación sube hacia 5–9% al mes según el modelo, y el riesgo de salto es el más alto de los tres. Importar y cobrar en dólares se hace más difícil.</p>
+  </section>
+</div>
+<div class="committee"><b>Cómo se usa</b>Mide; no recomienda. Ninguna válvula es buena o mala aquí: cada una cambia el diciembre y el enero de una empresa de forma distinta. En los tableros de cada empresa, los tres escenarios se cargan en el Traductor para ver su diciembre y su primer trimestre.</div>
+
+</div></main>
+
+<footer><div class="wrap">
+  <div>Fuentes: BCV, base monetaria semanal por fuentes y usos (hasta el 23 oct en fuentes y el 30 oct en usos), cuadro 1.2.10 (encaje semanal, hasta el 6 nov), cuadro 1.1.6 diario (tasas pasivas, provisional, hasta el 3 nov), tipo de cambio oficial 2.1.2 (hasta el 10 nov), resultados de colocación de títulos de cobertura (hasta el 9 nov), INPC (octubre); Res. BCV 26-10-01 (G.O. 43.489). Ventas de divisas: serie mensual de prensa y del BCV. Cifras en bolívares y en dólares a la tasa oficial del BCV.</div>
+  <div>Lectura de datos públicos, no recomendación de inversión, legal ni tributaria, ni opinión sobre la política económica. La brecha se muestra solo como ilustración.</div>
+</div></footer>
+
+<script type="application/json" id="data">{"asof":"2026-11-10","v1":{"weeks":[{"w":"2026-01-02","clean":4.8,"raw":4.8,"fx":0.0,"pe":4667.0},{"w":"2026-01-09","clean":2.1,"raw":2.1,"fx":0.0,"pe":4386.0},{"w":"2026-01-16","clean":6.8,"raw":6.8,"fx":0.0,"pe":4334.0},{"w":"2026-01-23","clean":0.0,"raw":-10.6,"fx":-10.6,"pe":3983.0},{"w":"2026-01-30","clean":0.0,"raw":14.9,"fx":0.0,"pe":4126.0},{"w":"2026-02-06","clean":4.5,"raw":4.5,"fx":0.0,"pe":4117.0},{"w":"2026-02-13","clean":-5.7,"raw":-5.7,"fx":0.0,"pe":3950.0},{"w":"2026-02-20","clean":6.9,"raw":6.9,"fx":0.0,"pe":3974.0},{"w":"2026-02-27","clean":0.0,"raw":12.4,"fx":0.0,"pe":4180.0},{"w":"2026-03-06","clean":-7.2,"raw":-7.2,"fx":0.0,"pe":4076.0},{"w":"2026-03-13","clean":16.6,"raw":24.8,"fx":5.4,"pe":4355.0},{"w":"2026-03-20","clean":0.0,"raw":10.2,"fx":10.2,"pe":4512.0},{"w":"2026-03-27","clean":-7.9,"raw":-7.9,"fx":0.0,"pe":4099.0},{"w":"2026-04-03","clean":0.0,"raw":-19.6,"fx":-19.6,"pe":3602.0},{"w":"2026-04-10","clean":0.0,"raw":11.2,"fx":6.5,"pe":4050.0},{"w":"2026-04-17","clean":-11.7,"raw":-15.6,"fx":-3.8,"pe":3485.0},{"w":"2026-04-24","clean":18.1,"raw":26.7,"fx":8.6,"pe":3847.0},{"w":"2026-05-01","clean":19.4,"raw":27.6,"fx":8.2,"pe":4200.0},{"w":"2026-05-08","clean":-27.9,"raw":-32.6,"fx":-4.8,"pe":3370.0},{"w":"2026-05-15","clean":22.0,"raw":37.5,"fx":15.5,"pe":4034.0},{"w":"2026-05-22","clean":0.0,"raw":-54.7,"fx":-54.7,"pe":2749.0},{"w":"2026-05-29","clean":0.0,"raw":18.1,"fx":10.1,"pe":2911.0},{"w":"2026-06-05","clean":7.7,"raw":7.7,"fx":0.0,"pe":3210.0},{"w":"2026-06-12","clean":19.2,"raw":19.2,"fx":0.0,"pe":3546.0},{"w":"2026-06-19","clean":6.0,"raw":6.0,"fx":0.0,"pe":3468.0},{"w":"2026-06-26","clean":0.0,"raw":-42.7,"fx":-37.9,"pe":2410.0},{"w":"2026-07-03","clean":6.8,"raw":6.8,"fx":0.0,"pe":2375.0},{"w":"2026-07-10","clean":0.0,"raw":11.3,"fx":7.0,"pe":2683.0},{"w":"2026-07-17","clean":0.0,"raw":-14.2,"fx":-8.5,"pe":2305.0},{"w":"2026-07-24","clean":0.0,"raw":28.7,"fx":21.2,"pe":2411.0},{"w":"2026-07-31","clean":0.0,"raw":25.6,"fx":25.6,"pe":2841.0},{"w":"2026-08-07","clean":0.0,"raw":-18.3,"fx":-18.3,"pe":2538.0},{"w":"2026-08-14","clean":0.0,"raw":12.4,"fx":12.4,"pe":2753.0},{"w":"2026-08-21","clean":7.1,"raw":7.1,"fx":0.0,"pe":2684.0},{"w":"2026-08-28","clean":-9.1,"raw":-9.1,"fx":0.0,"pe":2637.0},{"w":"2026-09-04","clean":0.0,"raw":12.8,"fx":12.8,"pe":2819.0},{"w":"2026-09-11","clean":-12.6,"raw":-33.4,"fx":-18.1,"pe":2119.0},{"w":"2026-09-18","clean":7.2,"raw":7.2,"fx":0.0,"pe":2432.0},{"w":"2026-09-25","clean":7.7,"raw":7.7,"fx":0.0,"pe":2765.0},{"w":"2026-10-02","clean":6.0,"raw":6.0,"fx":0.0,"pe":2761.0},{"w":"2026-10-09","clean":-8.9,"raw":-8.9,"fx":0.0,"pe":2497.0},{"w":"2026-10-16","clean":0.0,"raw":-22.7,"fx":-16.7,"pe":2174.0},{"w":"2026-10-23","clean":0.0,"raw":17.8,"fx":17.8,"pe":2589.0}],"months":[{"m":"2024-01","clean":-8.2,"raw":-127.8},{"m":"2024-02","clean":22.5,"raw":24.3},{"m":"2024-03","clean":11.0,"raw":11.0},{"m":"2024-04","clean":-1.1,"raw":-1.1},{"m":"2024-05","clean":10.6,"raw":11.1},{"m":"2024-06","clean":-2.0,"raw":-2.0},{"m":"2024-07","clean":16.1,"raw":17.0},{"m":"2024-08","clean":15.9,"raw":17.7},{"m":"2024-09","clean":-1.0,"raw":-1.0},{"m":"2024-10","clean":4.2,"raw":14.4},{"m":"2024-11","clean":11.5,"raw":264.7},{"m":"2024-12","clean":17.6,"raw":22.2},{"m":"2025-01","clean":7.3,"raw":7.3},{"m":"2025-02","clean":2.6,"raw":2.6},{"m":"2025-03","clean":7.9,"raw":-3.2},{"m":"2025-04","clean":19.5,"raw":28.6},{"m":"2025-05","clean":27.7,"raw":27.9},{"m":"2025-06","clean":11.5,"raw":11.5},{"m":"2025-07","clean":18.8,"raw":19.7},{"m":"2025-08","clean":14.6,"raw":14.6},{"m":"2025-09","clean":1.3,"raw":1.3},{"m":"2025-10","clean":-8.8,"raw":22.3},{"m":"2025-11","clean":-0.5,"raw":26.7},{"m":"2025-12","clean":14.0,"raw":48.6},{"m":"2026-01","clean":13.7,"raw":18.1},{"m":"2026-02","clean":5.8,"raw":18.1},{"m":"2026-03","clean":1.5,"raw":19.8},{"m":"2026-04","clean":6.4,"raw":2.8},{"m":"2026-05","clean":13.6,"raw":-4.0},{"m":"2026-06","clean":32.9,"raw":-9.8},{"m":"2026-07","clean":6.8,"raw":58.2},{"m":"2026-08","clean":-1.9,"raw":-7.8},{"m":"2026-09","clean":2.3,"raw":-5.7},{"m":"2026-10","clean":-2.9,"raw":-7.8}],"q4":{"2023":14.8,"2024":11.1,"2025":1.6},"q4raw":{"2023":-86.1,"2024":100.4,"2025":32.5},"last4":-2.9,"lastweek":"2026-10-23"},"v3":{"prior":{"2023":3.5,"2024":-5.5,"2025":-4.5},"cur4usd":3.5,"paths":{"2023":[["10-20",100.0],["10-27",100.1],["11-03",107.6],["11-10",108.2],["11-17",108.3],["11-24",109.6],["12-01",110.4],["12-08",112.2],["12-15",114.0],["12-22",119.8],["12-29",120.9],["01-05",121.0],["01-12",121.8],["01-19",122.4]],"2024":[["10-25",100.0],["11-01",100.5],["11-08",101.6],["11-15",102.3],["11-22",103.3],["11-29",107.8],["12-06",108.3],["12-13",109.4],["12-20",114.0],["12-27",115.2],["01-03",115.2],["01-10",115.7],["01-17",116.0]],"2025":[["10-24",100.0],["10-31",102.4],["11-07",110.6],["11-14",115.9],["11-21",117.1],["11-28",119.8],["12-05",122.2],["12-12",129.2],["12-19",132.2],["12-26",132.5],["01-02",132.6],["01-09",145.9],["01-16",146.0]],"2026":[["10-23",100.0],["10-30",101.9]]},"cur4":6.2,"dec":{"2023":10.3,"2024":6.9,"2025":10.6},"last":"2026-10-30","lvl":113.1,"usd":127.0,"share":5.5,"weekly":[{"w":"2026-01-02","bs":49.2,"usd":163.0},{"w":"2026-01-09","bs":54.2,"usd":167.0},{"w":"2026-01-16","bs":54.2,"usd":159.0},{"w":"2026-01-23","bs":54.4,"usd":154.0},{"w":"2026-01-30","bs":54.7,"usd":149.0},{"w":"2026-02-06","bs":55.3,"usd":145.0},{"w":"2026-02-13","bs":56.1,"usd":143.0},{"w":"2026-02-20","bs":56.4,"usd":140.0},{"w":"2026-02-27","bs":56.8,"usd":136.0},{"w":"2026-03-06","bs":61.7,"usd":143.0},{"w":"2026-03-13","bs":61.9,"usd":140.0},{"w":"2026-03-20","bs":62.9,"usd":138.0},{"w":"2026-03-27","bs":68.5,"usd":146.0},{"w":"2026-04-03","bs":69.4,"usd":146.0},{"w":"2026-04-10","bs":70.7,"usd":148.0},{"w":"2026-04-17","bs":71.1,"usd":148.0},{"w":"2026-04-24","bs":72.1,"usd":149.0},{"w":"2026-05-01","bs":76.9,"usd":158.0},{"w":"2026-05-08","bs":78.0,"usd":156.0},{"w":"2026-05-15","bs":79.3,"usd":154.0},{"w":"2026-05-22","bs":80.2,"usd":152.0},{"w":"2026-05-29","bs":81.3,"usd":148.0},{"w":"2026-06-05","bs":82.5,"usd":146.0},{"w":"2026-06-12","bs":83.5,"usd":143.0},{"w":"2026-06-19","bs":84.7,"usd":139.0},{"w":"2026-06-26","bs":85.7,"usd":138.0},{"w":"2026-07-03","bs":89.9,"usd":138.0},{"w":"2026-07-10","bs":91.0,"usd":128.0},{"w":"2026-07-17","bs":91.7,"usd":125.0},{"w":"2026-07-24","bs":92.9,"usd":126.0},{"w":"2026-07-31","bs":94.6,"usd":127.0},{"w":"2026-08-07","bs":95.6,"usd":126.0},{"w":"2026-08-14","bs":97.1,"usd":126.0},{"w":"2026-08-21","bs":98.1,"usd":126.0},{"w":"2026-08-28","bs":99.4,"usd":126.0},{"w":"2026-09-04","bs":101.0,"usd":125.0},{"w":"2026-09-11","bs":102.7,"usd":123.0},{"w":"2026-09-18","bs":103.7,"usd":122.0},{"w":"2026-09-25","bs":105.3,"usd":123.0},{"w":"2026-10-02","bs":106.5,"usd":123.0},{"w":"2026-10-09","bs":108.4,"usd":124.0},{"w":"2026-10-16","bs":109.4,"usd":124.0},{"w":"2026-10-23","bs":111.0,"usd":125.0},{"w":"2026-10-30","bs":113.1,"usd":127.0}]},"v2":{"weeks":[{"w":"2026-06-05","req":1442.8,"bal":1384.2,"net":-58.5,"pct":-4.1},{"w":"2026-06-12","req":1461.6,"bal":1411.7,"net":-50.0,"pct":-3.4},{"w":"2026-06-19","req":1535.0,"bal":1360.3,"net":-174.7,"pct":-11.4},{"w":"2026-06-26","req":1568.4,"bal":1283.4,"net":-285.0,"pct":-18.2},{"w":"2026-07-03","req":1614.0,"bal":1275.1,"net":-338.9,"pct":-21.0},{"w":"2026-07-10","req":1586.3,"bal":1196.7,"net":-389.6,"pct":-24.6},{"w":"2026-07-17","req":1624.2,"bal":1221.0,"net":-403.2,"pct":-24.8},{"w":"2026-07-23","req":1562.5,"bal":1245.3,"net":-317.1,"pct":-20.3},{"w":"2026-07-31","req":1655.7,"bal":1252.8,"net":-402.9,"pct":-24.3},{"w":"2026-08-07","req":1682.7,"bal":1367.7,"net":-315.0,"pct":-18.7},{"w":"2026-08-14","req":1707.5,"bal":1320.0,"net":-387.4,"pct":-22.7},{"w":"2026-08-21","req":1788.1,"bal":1425.0,"net":-363.2,"pct":-20.3},{"w":"2026-08-28","req":1816.6,"bal":1488.1,"net":-328.5,"pct":-18.1},{"w":"2026-09-04","req":1942.0,"bal":1630.1,"net":-311.9,"pct":-16.1},{"w":"2026-09-11","req":2000.1,"bal":1474.3,"net":-525.8,"pct":-26.3},{"w":"2026-09-18","req":1486.9,"bal":1512.7,"net":25.8,"pct":1.7},{"w":"2026-09-25","req":1414.2,"bal":1593.3,"net":179.2,"pct":12.7},{"w":"2026-10-02","req":1501.7,"bal":1689.1,"net":187.4,"pct":12.5},{"w":"2026-10-09","req":1472.3,"bal":1759.7,"net":287.4,"pct":19.5},{"w":"2026-10-16","req":1630.0,"bal":1740.8,"net":110.8,"pct":6.8},{"w":"2026-10-23","req":1661.9,"bal":1757.1,"net":95.2,"pct":5.7},{"w":"2026-10-30","req":1743.2,"bal":1824.0,"net":80.8,"pct":4.6},{"w":"2026-11-06","req":1748.7,"bal":1919.4,"net":170.6,"pct":9.8}],"resolution":null},"v4":{"months":[{"m":"2025-01","usd":277,"approx":0},{"m":"2025-02","usd":230,"approx":0},{"m":"2025-03","usd":172,"approx":0},{"m":"2025-04","usd":310,"approx":0},{"m":"2025-05","usd":400,"approx":0},{"m":"2025-06","usd":360,"approx":0},{"m":"2025-07","usd":350,"approx":0},{"m":"2025-08","usd":381,"approx":0},{"m":"2025-09","usd":332,"approx":1},{"m":"2025-10","usd":387,"approx":1},{"m":"2025-11","usd":351,"approx":1},{"m":"2025-12","usd":321,"approx":1},{"m":"2026-01","usd":421,"approx":0},{"m":"2026-02","usd":734,"approx":0},{"m":"2026-03","usd":1329,"approx":0},{"m":"2026-04","usd":1509,"approx":0},{"m":"2026-05","usd":1350,"approx":0},{"m":"2026-06","usd":1580,"approx":0},{"m":"2026-07","usd":1800,"approx":1},{"m":"2026-08","usd":1550,"approx":1},{"m":"2026-09","usd":1400,"approx":1},{"m":"2026-10","usd":1585,"approx":1}],"avg26":1297,"ranges":{"2026-10":{"lo":1100,"hi":1585,"src":"Serie mensual de prensa y del BCV (aprox., US$ 1.585 MM); otra estimación sin fuente pública (US$ 1.100–1.250 MM)"}},"reserves":[{"w":"2026-01-02","usd":11.16},{"w":"2026-01-09","usd":11.27},{"w":"2026-01-16","usd":11.48},{"w":"2026-01-23","usd":11.98},{"w":"2026-01-30","usd":12.41},{"w":"2026-02-06","usd":11.87},{"w":"2026-02-13","usd":12.22},{"w":"2026-02-20","usd":12.12},{"w":"2026-02-27","usd":12.27},{"w":"2026-03-06","usd":12.09},{"w":"2026-03-13","usd":11.99},{"w":"2026-03-20","usd":11.35},{"w":"2026-03-27","usd":10.96},{"w":"2026-04-03","usd":11.61},{"w":"2026-04-10","usd":11.46},{"w":"2026-04-17","usd":11.54},{"w":"2026-04-24","usd":11.35},{"w":"2026-05-01","usd":11.15},{"w":"2026-05-08","usd":11.27},{"w":"2026-05-15","usd":10.89},{"w":"2026-05-22","usd":12.52},{"w":"2026-05-29","usd":10.84},{"w":"2026-06-05","usd":10.73},{"w":"2026-06-12","usd":11.31},{"w":"2026-06-19","usd":10.68},{"w":"2026-06-26","usd":11.86},{"w":"2026-07-03","usd":11.37},{"w":"2026-07-10","usd":11.16},{"w":"2026-07-17","usd":11.64},{"w":"2026-07-24","usd":11.23},{"w":"2026-07-31","usd":10.69},{"w":"2026-08-07","usd":11.14},{"w":"2026-08-14","usd":10.89},{"w":"2026-08-21","usd":11.25},{"w":"2026-08-28","usd":11.23},{"w":"2026-09-04","usd":10.67},{"w":"2026-09-11","usd":11.04},{"w":"2026-09-18","usd":11.21},{"w":"2026-09-25","usd":10.6},{"w":"2026-10-02","usd":10.55},{"w":"2026-10-09","usd":10.56},{"w":"2026-10-16","usd":11.25},{"w":"2026-10-23","usd":10.62}]},"rates":[{"d":"2026-09-01","sav":32.0,"ccr":0.4,"t30":36.0},{"d":"2026-09-02","sav":32.0,"ccr":0.4,"t30":null},{"d":"2026-09-03","sav":32.0,"ccr":0.4,"t30":null},{"d":"2026-09-04","sav":32.0,"ccr":0.4,"t30":null},{"d":"2026-09-07","sav":32.0,"ccr":0.4,"t30":null},{"d":"2026-09-08","sav":32.0,"ccr":0.4,"t30":36.0},{"d":"2026-09-09","sav":32.0,"ccr":0.4,"t30":null},{"d":"2026-09-10","sav":32.0,"ccr":0.4,"t30":null},{"d":"2026-09-11","sav":32.0,"ccr":0.4,"t30":36.0},{"d":"2026-09-15","sav":42.0,"ccr":10.0,"t30":null},{"d":"2026-09-16","sav":42.0,"ccr":10.0,"t30":79.8},{"d":"2026-09-17","sav":42.0,"ccr":10.0,"t30":48.5},{"d":"2026-09-18","sav":42.0,"ccr":10.0,"t30":49.6},{"d":"2026-09-21","sav":42.0,"ccr":10.0,"t30":56.6},{"d":"2026-09-22","sav":42.0,"ccr":10.0,"t30":50.1},{"d":"2026-09-23","sav":42.0,"ccr":10.0,"t30":67.3},{"d":"2026-09-24","sav":42.0,"ccr":10.0,"t30":87.8},{"d":"2026-09-25","sav":42.0,"ccr":10.0,"t30":90.1},{"d":"2026-09-28","sav":42.0,"ccr":10.0,"t30":49.2},{"d":"2026-09-29","sav":42.0,"ccr":10.0,"t30":55.6},{"d":"2026-09-30","sav":42.0,"ccr":10.0,"t30":56.3},{"d":"2026-10-01","sav":42.0,"ccr":10.0,"t30":55.2},{"d":"2026-10-02","sav":42.0,"ccr":10.0,"t30":72.8},{"d":"2026-10-05","sav":42.0,"ccr":10.0,"t30":61.3},{"d":"2026-10-06","sav":42.0,"ccr":10.0,"t30":60.8},{"d":"2026-10-07","sav":42.0,"ccr":10.0,"t30":66.5},{"d":"2026-10-08","sav":42.0,"ccr":10.0,"t30":55.9},{"d":"2026-10-09","sav":42.0,"ccr":10.0,"t30":69.3},{"d":"2026-10-13","sav":42.0,"ccr":10.0,"t30":76.2},{"d":"2026-10-14","sav":42.0,"ccr":10.0,"t30":63.7},{"d":"2026-10-15","sav":42.0,"ccr":10.0,"t30":62.3},{"d":"2026-10-16","sav":42.0,"ccr":10.0,"t30":60.0},{"d":"2026-10-19","sav":42.0,"ccr":10.0,"t30":63.1},{"d":"2026-10-20","sav":42.0,"ccr":10.0,"t30":65.7},{"d":"2026-10-21","sav":42.0,"ccr":10.0,"t30":59.3},{"d":"2026-10-22","sav":42.0,"ccr":10.0,"t30":49.4},{"d":"2026-10-23","sav":42.0,"ccr":10.0,"t30":61.1},{"d":"2026-10-27","sav":42.0,"ccr":10.0,"t30":73.5},{"d":"2026-10-28","sav":42.0,"ccr":10.0,"t30":64.9},{"d":"2026-10-29","sav":42.0,"ccr":10.0,"t30":59.1},{"d":"2026-10-30","sav":42.0,"ccr":10.0,"t30":61.3},{"d":"2026-11-02","sav":47.0,"ccr":15.1,"t30":59.2},{"d":"2026-11-03","sav":47.0,"ccr":15.1,"t30":57.8}],"crawl":[{"m":"2025-01","crawl":11.6,"infl":9.8},{"m":"2025-02","crawl":10.8,"infl":10.9},{"m":"2025-03","crawl":8.3,"infl":8.3},{"m":"2025-04","crawl":24.8,"infl":16.4},{"m":"2025-05","crawl":11.5,"infl":21.2},{"m":"2025-06","crawl":11.1,"infl":10.3},{"m":"2025-07","crawl":15.7,"infl":14.2},{"m":"2025-08","crawl":18.1,"infl":16.1},{"m":"2025-09","crawl":20.8,"infl":21.6},{"m":"2025-10","crawl":25.9,"infl":25.9},{"m":"2025-11","crawl":9.8,"infl":21.6},{"m":"2025-12","crawl":21.4,"infl":13.6},{"m":"2026-01","crawl":23.2,"infl":32.6},{"m":"2026-02","crawl":13.6,"infl":14.6},{"m":"2026-03","crawl":13.5,"infl":13.1},{"m":"2026-04","crawl":2.8,"infl":10.6},{"m":"2026-05","crawl":12.8,"infl":6.3},{"m":"2026-06","crawl":13.4,"infl":13.8},{"m":"2026-07","crawl":19.8,"infl":19.9},{"m":"2026-08","crawl":6.5,"infl":8.9},{"m":"2026-09","crawl":8.1,"infl":8.4},{"m":"2026-10","crawl":3.5,"infl":6.2},{"m":"2026-11","crawl":1.1,"infl":null}],"crawl_mtd":{"days":10,"pct":1.13,"last":"2026-11-10","rate":899.27},"implied":{"rules":[{"rule":"Antes del 15 sep (32% / 36%)","savings":29.1,"term":33.5},{"rule":"Res. 26-08-01 (42% / 46%)","savings":42.3,"term":46.4},{"rule":"Res. 26-10-01 (47% / 51%)","savings":49.3,"term":53.2}],"market":[{"w":"2026-09-18","t30":51.6,"impl":59.5},{"w":"2026-09-25","t30":71.8,"impl":93.8},{"w":"2026-10-02","t30":59.5,"impl":72.2},{"w":"2026-10-09","t30":64.8,"impl":81.2},{"w":"2026-10-16","t30":63.3,"impl":78.6},{"w":"2026-10-23","t30":60.8,"impl":74.3},{"w":"2026-10-30","t30":64.7,"impl":81.0},{"w":"2026-11-06","t30":58.5,"impl":70.5}],"oct_pace":3.5,"oct_annual":51.0},"tc":{"2026-10-09":6.3,"2026-10-16":20.1,"2026-10-23":19.0,"2026-10-30":11.9,"2026-11-06":13.7,"2026-11-13":2.9},"cmp":{"rows":[{"w":"2026-10-02","hasta":"2026-10-02","fin_hasta":"2026-10-02","pesos":{"austero":0.017,"goteo":0.019,"apreton":0.964},"x":0.66,"y":-0.72,"dev":7.87,"salto":0.124,"canal":1.13,"canal_rel":0.42},{"w":"2026-10-09","hasta":"2026-10-09","fin_hasta":"2026-10-09","pesos":{"austero":0.15,"goteo":0.426,"apreton":0.424},"x":2.45,"y":-0.25,"dev":5.57,"salto":0.189,"canal":1.22,"canal_rel":0.51},{"w":"2026-10-16","hasta":"2026-10-16","fin_hasta":"2026-10-16","pesos":{"austero":0.522,"goteo":0.302,"apreton":0.176},"x":-0.52,"y":-0.03,"dev":3.99,"salto":0.242,"canal":0.61,"canal_rel":-0.1},{"w":"2026-10-23","hasta":"2026-10-23","fin_hasta":"2026-10-23","pesos":{"austero":0.542,"goteo":0.344,"apreton":0.114},"x":-0.34,"y":-0.25,"dev":3.83,"salto":0.233,"canal":0.45,"canal_rel":-0.26},{"w":"2026-10-30","hasta":"2026-10-30","fin_hasta":"2026-10-23","pesos":{"austero":0.597,"goteo":0.38,"apreton":0.023},"x":-0.34,"y":-0.41,"dev":2.81,"salto":0.253,"canal":0.16,"canal_rel":-0.55},{"w":"2026-11-06","hasta":"2026-11-06","fin_hasta":"2026-10-23","pesos":{"austero":0.603,"goteo":0.384,"apreton":0.013},"x":-0.34,"y":-0.54,"dev":2.51,"salto":0.253,"canal":0.65,"canal_rel":-0.06},{"w":"2026-11-13","hasta":"2026-11-10","fin_hasta":"2026-10-23","pesos":{"austero":0.589,"goteo":0.375,"apreton":0.036},"x":-0.34,"y":0.12,"dev":2.75,"salto":0.292,"canal":1.47,"canal_rel":0.76}],"hoy":{"d":"2026-11-10","pesos":{"austero":0.58,"goteo":0.369,"apreton":0.051},"x":-0.34,"y":0.46,"dev":2.75,"salto":0.317,"canal_d":"2026-11-09","canal":2.63,"canal_rel":1.92},"canal_oct":0.71,"sd":{"dev":0.01,"fin":0.15},"note":"Pesos con las expectativas de noviembre de cada escenario; ver el método en la página."}}</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const fmt=(v,n=1)=>v==null||!isFinite(v)?'—':v.toLocaleString('es-VE',{minimumFractionDigits:n,maximumFractionDigits:n});
+const sgn=(v,n=1)=>(v>0?'+':v<0?'−':'')+fmt(Math.abs(v),n);
+const mon=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const dlab=w=>{const[y,m,d]=w.split('-');return +d+' '+mon[+m-1]};
+const mlab=m=>{const[y,mm]=m.split('-');return mon[+mm-1]+' '+y.slice(2)};
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e};
+const C={cyan:'#06B6D4',amber:'#F59E0B',violet:'#9085E9',rose:'#D55181',ink2:'#A7B6D3',ink3:'#7A8BB0',line:'#1F2C52',line2:'#2A3A66',bad:'#F87171'};
+document.getElementById('asof').textContent='Al '+dlab(D.asof)+' de 2026';
+
+/* chart kit: categorical x; bars (one or two per slot) and lines; hover titles */
+function chart(host,{x,bars=[],lines=[],whiskers=[],ymin,ymax,ticks,h=220,yfmt=v=>fmt(v,0),xlab=s=>s,every=1,refs=[]}){
+  const narrow=host.clientWidth>0&&host.clientWidth<520;if(narrow){every=Math.ceil(every*2);h=Math.round(h*0.85)}
+  const W=narrow?360:640,H=h,L=narrow?38:44,R=10,T=10,B=24,n=x.length,slot=(W-L-R)/n;
+  const X=i=>L+slot*(i+.5),Y=v=>T+(ymax-Math.max(ymin,Math.min(ymax,v)))*(H-T-B)/(ymax-ymin);
+  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});
+  for(const t of ticks){s.append(el('line',{x1:L,x2:W-R,y1:Y(t),y2:Y(t),stroke:t===0?C.line2:C.line,'stroke-width':t===0?1.3:1}));s.append(el('text',{x:L-6,y:Y(t)+4,'text-anchor':'end'},yfmt(t)))}
+  x.forEach((k,i)=>{if((i%every===0&&n-1-i>=every/2)||i===n-1)s.append(el('text',{x:X(i),y:H-7,'text-anchor':'middle'},xlab(k)))});
+  for(const r of refs){s.append(el('line',{x1:L,x2:W-R,y1:Y(r.v),y2:Y(r.v),stroke:r.c,'stroke-dasharray':'4 3','stroke-width':1.4}));if(r.t)s.append(el('text',{x:W-R,y:Y(r.v)-4,'text-anchor':'end',style:`fill:${r.c}`},r.t))}
+  const nb=bars.length,bw=Math.min(26,slot*.72/Math.max(1,nb));
+  bars.forEach((b,j)=>b.vals.forEach((v,i)=>{if(v==null)return;const x0=X(i)-nb*bw/2+j*bw,y0=Y(Math.max(0,v)),y1=Y(Math.min(0,v));
+    const r=el('rect',{x:x0+.5,y:y0,width:bw-1,height:Math.max(.8,y1-y0),fill:(b.colorAt&&b.colorAt(i))||b.c,opacity:(b.opAt&&b.opAt(i))||1});r.append(el('title',{},`${xlab(x[i])}: ${b.fmt?b.fmt(v):fmt(v,1)}${b.name?' · '+b.name:''}`));s.append(r)}));
+  for(const w of whiskers){const xx=X(w.i);s.append(el('line',{x1:xx,x2:xx,y1:Y(w.lo),y2:Y(w.hi),stroke:w.c,'stroke-width':2}));for(const v of[w.lo,w.hi])s.append(el('line',{x1:xx-6,x2:xx+6,y1:Y(v),y2:Y(v),stroke:w.c,'stroke-width':2}));const t=el('title',{},w.t);s.lastChild.append(t)}
+  for(const ln of lines){let d='',started=false;ln.vals.forEach((v,i)=>{if(v==null){started=ln.join?started:false;return}d+=(started?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1);started=true});
+    s.append(el('path',{d,fill:'none',stroke:ln.c,'stroke-width':ln.w||2,'stroke-dasharray':ln.dash||'','stroke-linejoin':ln.step?'miter':'round'}));
+    if(ln.dots)ln.vals.forEach((v,i)=>{if(v==null)return;const c=el('circle',{cx:X(i),cy:Y(v),r:3,fill:ln.c});c.append(el('title',{},`${xlab(x[i])}: ${fmt(v,1)}`));s.append(c)})}
+  host.replaceChildren(s);
+}
+const stat=(v,s)=>`<div class="stat"><div class="v">${v}</div><div class="s">${s}</div></div>`;
+
+/* ---------- status lights (thresholds are Supuesto, stated on the cards) ---------- */
+const V1=D.v1,V2=D.v2,V3=D.v3,V4=D.v4;
+const st1=V1.last4>=10?'o':V1.last4>=4?'m':'q';
+const enc=V2.weeks,e1=enc[enc.length-1],e0=enc[enc.length-2];
+const st2=V2.resolution?'o':(e1.pct-e0.pct>=10?'m':'q');
+const cw=V3.weekly,c1=cw[cw.length-1];const cur$=V3.cur4usd;
+const st3=cur$>=8?'o':cur$>=3?'m':'q';
+const sm=V4.months,s1=sm[sm.length-1];const rg=V4.ranges[s1.m];const smid=rg?(rg.lo+rg.hi)/2:s1.usd;const dsales=(smid/V4.avg26-1)*100;const dlo=(rg.lo/V4.avg26-1)*100,dhi=(rg.hi/V4.avg26-1)*100;
+const st4=dsales>=50?'o':dsales>=20?'m':'q';
+const big=[st1,st2].every(s=>s==='q'),anyOpen=[st1,st2,st3,st4].includes('o');
+const st5=big&&!anyOpen?'m':'q';
+const moving=[[st3,'el efectivo'],[st4,'la mesa cambiaria']].filter(x=>x[0]==='m').map(x=>x[1]);
+const LBL={q:'Quieta',m:'Se mueve',o:'Abierta'};
+const light=s=>`<span class="light ${s}"><i></i>${LBL[s]}</span>`;
+const valves=[
+  ['v1','1','La puerta de atrás',st1,`Inyección pública limpia, últimas 4 semanas: ${sgn(V1.last4)}% de la base (al ${dlab(V1.lastweek)})`],
+  ['v2','2','El BCV suelta el encaje',st2,`Sin resolución. Excedente de encaje: ${fmt(e1.pct)}% del requerido (al ${dlab(e1.w)})`],
+  ['v3','3','Bonos y aguinaldos',st3,`Efectivo en dólares oficiales, 4 semanas: ${sgn(cur$)}% (al ${dlab(c1.w)})`],
+  ['v4','4','Más dólares en la mesa',st4,`Octubre: US$ ${fmt(rg.lo,0)}–${fmt(rg.hi,0)} MM según la fuente; punto medio ${sgn(dsales,0)}% contra el promedio de 2026`],
+  ['v5','5','Nadie la abre',st5,st5==='m'?'Las válvulas grandes siguen quietas: por ahora, el diciembre austero':'Al menos una válvula grande se mueve']];
+document.getElementById('valves').innerHTML=valves.map(([id,n,t,s,r])=>`<a class="valve" href="#${id}"><span class="n">Válvula ${n}</span>${light(s)}<span class="t">${t}</span><span class="r">${r}</span></a>`).join('');
+document.getElementById('verdict').textContent=anyOpen?'Una válvula está abierta: revise cuál.':big?('Las válvulas grandes siguen cerradas.'+(moving.length?(moving.length>1?' Se mueven poco ':' Se mueve poco ')+moving.join(' y ')+'.':'')):'La puerta de atrás o el encaje se mueven: revise la válvula.';
+document.getElementById('verdict-p').innerHTML=(D.cmp?`<b style="color:var(--ink)">Lado del dólar:</b> desde el 7 de noviembre aprieta con el dólar oficial anclado (${fmt(D.cmp.hoy.dev,1)}% al mes en 4 semanas). Por eso el apretón pesa poco (${fmt(D.cmp.hoy.pesos.apreton*100,0)}%) y la presión se acumula: el riesgo de salto sube a ${fmt(D.cmp.hoy.salto*100,0)}% en el próximo mes. `:'')+`El sector público no inyecta bolívares desde agosto (limpio de operaciones en dólares). El salto de la línea de empresas públicas del 23 de octubre (+${fmt(V1.weeks[V1.weeks.length-1].raw,1)}% de la base) coincidió con una caída de las reservas: fue una operación en dólares, no bolívares nuevos. El efectivo sube ${sgn(V3.cur4usd)}% en dólares en 4 semanas, en el borde alto de las mismas semanas de 2023 a 2025 y antes de los aguinaldos; el encaje no se ha tocado, y el dólar oficial sube menos que los precios. Umbrales de cada luz: <span class="tag sup">Supuesto</span> (puerta de atrás: 4% y 10% de la base en 4 semanas; efectivo: 3% y 8% en dólares; mesa: 20% y 50% sobre el promedio).`;
+
+/* ---------- compass, weights, channel, step ---------- */
+(function(){
+  const K=D.cmp; if(!K){document.getElementById('brujula').closest('.grid2').previousElementSibling.hidden=true;return}
+  const rows=K.rows,hoy=K.hoy;
+  // compass
+  (function(){const host=document.getElementById('ch-brujula');const narrow=host.clientWidth>0&&host.clientWidth<520;const W=narrow?360:560,H=narrow?330:400,P=narrow?34:44;
+    const xs=[-1.5,3],ys=[-2,3];const X=v=>P+(v-xs[0])/(xs[1]-xs[0])*(W-2*P),Y=v=>H-P-(v-ys[0])/(ys[1]-ys[0])*(H-2*P);
+    const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Brújula de escenarios'});
+    const xm=X(.5),ym=Y(1);
+    [[X(xs[0]),Y(ys[1]),xm,ym,'Apretón del dólar','#F87171'],[xm,Y(ys[1]),X(xs[1]),ym,'Goteo + apretón','#F87171'],[X(xs[0]),ym,xm,Y(ys[0]),'Diciembre austero','#7A8BB0'],[xm,ym,X(xs[1]),Y(ys[0]),'Goteo administrado','#F59E0B']].forEach(([x0,y0,x1,y1,t,c])=>{s.append(el('rect',{x:x0,y:y0,width:x1-x0,height:y1-y0,fill:c,'fill-opacity':.07,stroke:'#1F2C52'}));s.append(el('text',{x:x0+8,y:y0+18,style:`fill:${c};font-family:var(--cond);font-size:${narrow?11:12.5}px;letter-spacing:.06em;text-transform:uppercase`},t))});
+    s.append(el('text',{x:W/2,y:H-8,'text-anchor':'middle'},'Bolívares: financiamiento a empresas del Estado →'));
+    const yl=el('text',{x:12,y:H/2,'text-anchor':'middle',transform:`rotate(-90 12 ${H/2})`},'Presión del lado del dólar →');s.append(yl);
+    let d='';rows.forEach((r,i)=>{d+=(i?'L':'M')+X(r.x).toFixed(1)+' '+Y(r.y).toFixed(1)});s.append(el('path',{d,fill:'none',stroke:'#2A3A66','stroke-width':1.5}));
+    rows.forEach((r,i)=>{const last=i===rows.length-1;const c=el('circle',{cx:X(r.x),cy:Y(r.y),r:last?7:4.5,fill:'#06B6D4','fill-opacity':last?1:.25+.6*i/rows.length});c.append(el('title',{},`Semana al ${dlab(r.w)}`));s.append(c);if(last||i===0)s.append(el('text',{x:X(r.x)+9,y:Y(r.y)+4,style:'fill:#A7B6D3'},last?'semana al '+dlab(r.hasta):dlab(r.w)))});
+    const hc=el('circle',{cx:X(hoy.x),cy:Y(hoy.y),r:6,fill:'#F59E0B'});hc.append(el('title',{},'Último día, '+dlab(hoy.d)));s.append(hc);
+    host.replaceChildren(s)})();
+  // weights
+  const ks=['austero','goteo','apreton'],cs={austero:C.ink3,goteo:C.amber,apreton:C.bad},nm={austero:'Diciembre austero',goteo:'Goteo administrado',apreton:'Apretón del dólar'};
+  document.getElementById('pesos-stats').innerHTML=ks.map(k=>stat(fmt(hoy.pesos[k]*100,0)+'%',nm[k]+', '+dlab(hoy.d))).join('');
+  (function(){const host=document.getElementById('ch-pesos');const narrow=host.clientWidth>0&&host.clientWidth<520;const W=narrow?360:640,H=narrow?190:220,L=40,R=8,T=8,B=24,n=rows.length,slot=(W-L-R)/n,bw=slot*.7;
+    const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'});const Y=v=>T+(1-v)*(H-T-B);
+    [0,.5,1].forEach(t=>{s.append(el('line',{x1:L,x2:W-R,y1:Y(t),y2:Y(t),stroke:'#1F2C52'}));s.append(el('text',{x:L-6,y:Y(t)+4,'text-anchor':'end'},fmt(t*100,0)+'%'))});
+    rows.forEach((r,i)=>{let acc=0;const x=L+slot*i+(slot-bw)/2;ks.forEach(k=>{const v=r.pesos[k];const rc=el('rect',{x,y:Y(acc+v),width:bw,height:Math.max(0,Y(acc)-Y(acc+v)),fill:cs[k]});rc.append(el('title',{},`${dlab(r.w)} · ${nm[k]}: ${fmt(v*100,0)}%`));s.append(rc);acc+=v});
+      if(!narrow||i%2===0||i===n-1)s.append(el('text',{x:x+bw/2,y:H-7,'text-anchor':'middle'},dlab(i===n-1?r.hasta:r.w)))});
+    host.replaceChildren(s)})();
+  document.getElementById('pesos-note').innerHTML=`Cada semana se compara lo observado con lo que espera cada escenario para noviembre: el ritmo del dólar oficial en 4 semanas (${fmt(hoy.dev,1)}% al mes al ${dlab(hoy.d)}; austero y goteo suponen 3,5%, el apretón 5%), el financiamiento a empresas del Estado (austero y apretón, nada; goteo, 11% de la base) y la presión del lado del dólar contra su banda del 80%. Pesos iniciales iguales; ruido de lectura: 1 punto en el ritmo y 15 puntos de la base en el financiamiento <span class="tag sup">Supuesto</span>. Mientras el dólar oficial no acelere, el apretón pesa poco aunque el lado del dólar presione: la presión se acumula en la brújula y en el riesgo de salto. <span class="tag">Modelado</span>`;
+  // channel
+  const cr=rows.filter(r=>r.canal_rel!=null);
+  document.getElementById('canal-stats').innerHTML=stat(sgn(hoy.canal_rel,1)+' pts','sobre octubre, '+dlab(hoy.canal_d))+stat(sgn(cr[cr.length-1].canal_rel,1)+' pts','promedio de la semana, hasta el '+dlab(cr[cr.length-1].hasta));
+  chart(document.getElementById('ch-canal'),{x:cr.map((r,i)=>i===cr.length-1?r.hasta:r.w).concat(['hoy']),xlab:k=>k==='hoy'?dlab(hoy.canal_d)+' (día)':dlab(k),every:2,ymin:-1,ymax:3,ticks:[-1,0,1,2,3],yfmt:v=>sgn(v,0),h:190,
+    bars:[{vals:cr.map(r=>r.canal_rel).concat([hoy.canal_rel]),c:C.violet,opAt:i=>i===cr.length?1:.75,fmt:v=>sgn(v,2)+' pts'}]});
+  // step gauge
+  const z=p=>p<.15?['bajo','#34D399']:p<.35?['medio','#FBBF24']:['alto','#F87171'];
+  const [zl,zc]=z(hoy.salto);
+  document.getElementById('salto-stats').innerHTML=stat(`<span style="color:${zc}">${fmt(hoy.salto*100,0)}%</span>`,`en el próximo mes · ${zl} · ${dlab(hoy.d)}`)+stat(fmt(rows[0].salto*100,0)+'%','semana al '+dlab(rows[0].w));
+  chart(document.getElementById('ch-salto'),{x:rows.map((r,i)=>i===rows.length-1?r.hasta:r.w).concat(['hoy']),xlab:k=>k==='hoy'?dlab(hoy.d)+' (día)':dlab(k),every:2,ymin:0,ymax:.5,ticks:[0,.15,.35,.5],yfmt:v=>fmt(v*100,0)+'%',h:190,
+    refs:[{v:.15,c:'#34D399'},{v:.35,c:'#F87171'}],lines:[{c:C.cyan,dots:true,vals:rows.map(r=>r.salto).concat([hoy.salto])}]});
+})();
+/* ---------- V1 ---------- */
+(function(){
+  const M=V1.months;
+  const q=V1.q4;
+  document.getElementById('v1-stats').innerHTML=stat(sgn(V1.last4)+'%','últimas 4 semanas, % de la base')+stat(fmt(M.find(m=>m.m==='2024-12').clean,1)+'%','diciembre de 2024')+stat(fmt(M.find(m=>m.m==='2025-12').clean,1)+'%','diciembre de 2025')+stat(sgn(M.filter(m=>m.m>='2026-08').reduce((a,m)=>a+m.clean,0)/M.filter(m=>m.m>='2026-08').length)+'%','promedio mensual ago–oct 2026');
+  chart(document.getElementById('ch-v1'),{x:M.map(m=>m.m),xlab:mlab,every:3,ymin:-15,ymax:35,ticks:[-10,0,10,20,30],yfmt:v=>v+'%',
+    bars:[{vals:M.map(m=>m.clean),c:C.cyan,colorAt:i=>M[i].m.endsWith('-12')?C.amber:C.cyan,fmt:v=>sgn(v)+'% de la base'}]});
+})();
+/* ---------- V2 ---------- */
+(function(){
+  const E=V2.weeks;
+  document.getElementById('v2-stats').innerHTML=stat(fmt(e1.pct)+'%',`excedente, ${dlab(e1.w)}`)+stat('Bs '+fmt(e1.net,0)+' mil MM','sobre Bs '+fmt(e1.req,0)+' mil MM requeridos');
+  chart(document.getElementById('ch-v2'),{x:E.map(e=>e.w),xlab:dlab,every:4,ymin:-40,ymax:30,ticks:[-30,-20,-10,0,10,20,30],yfmt:v=>v+'%',
+    bars:[{vals:E.map(e=>e.pct),c:C.cyan,colorAt:i=>E[i].pct<0?C.bad:C.cyan,fmt:v=>sgn(v)+'% del requerido'}]});
+})();
+/* ---------- V3 ---------- */
+(function(){
+  const P=V3.paths,yrs=['2023','2024','2025','2026'],cols={2023:C.line2,2024:C.ink3,2025:C.violet,2026:C.cyan};
+  const keys=[...new Set([].concat(...yrs.map(y=>P[y].map(p=>p[0]))))].sort((a,b)=>{const f=k=>(k<'06'?'1':'0')+k;return f(a)<f(b)?-1:1});
+  const sel=keys.filter(k=>k>='10-20'||k<='01-20');
+  const near=(arr,k)=>{const f=kk=>(kk<'06'?13:0)*100+ (+kk.slice(0,2))*31+(+kk.slice(3));const t=f(k);let b=null,bd=9;for(const[p,v]of arr){const d=Math.abs(f(p)-t);if(d<4&&d<bd){bd=d;b=v}}return b};
+  const grid=[];for(let m of['10','11','12','01'])for(let d of[1,8,15,22,29]){const k=m+'-'+String(d).padStart(2,'0');if((m==='10'&&d<22)||(m==='01'&&d>22))continue;grid.push(k)}
+  chart(document.getElementById('ch-v3'),{x:grid,xlab:k=>+k.slice(3)+' '+mon[+k.slice(0,2)-1],every:4,ymin:95,ymax:150,ticks:[100,110,120,130,140,150],
+    lines:yrs.map(y=>({c:cols[y],w:y==='2026'?2.6:1.6,dots:y==='2026',vals:grid.map(k=>near(P[y],k))}))});
+  document.getElementById('v3-leg').innerHTML=yrs.map(y=>`<span><i style="background:${cols[y]}"></i>${y}–${+y+1}</span>`).join('');
+  const dec=V3.dec;
+  document.getElementById('v3-stats').innerHTML=stat('Bs '+fmt(V3.lvl,0)+' mil MM',`en circulación, ${dlab(V3.last)}`)+stat(fmt(V3.share,1)+'%','de la base')+stat('+'+fmt(dec['2024'],1)+'% y +'+fmt(dec['2025'],1)+'%','salto dentro de diciembre, 2024 y 2025')+stat(sgn(V3.cur4usd)+'%',`en dólares, 4 semanas; mismas semanas de 2023, 2024 y 2025: ${Object.values(V3.prior).map(v=>sgn(v)).join('%, ')}%`);
+})();
+/* ---------- V4 ---------- */
+(function(){
+  const M=V4.months;
+  document.getElementById('v4-stats').innerHTML=stat('US$ '+fmt(rg.lo,0)+'–'+fmt(rg.hi,0)+' MM','octubre de 2026, según la fuente')+stat('US$ '+fmt(V4.avg26,0)+' MM','promedio ene–sep 2026')+stat(sgn(dlo,0)+'% a '+sgn(dhi,0)+'%','octubre contra el promedio');
+  chart(document.getElementById('ch-v4'),{x:M.map(m=>m.m),xlab:mlab,every:4,ymin:0,ymax:2000,ticks:[0,500,1000,1500,2000],yfmt:v=>fmt(v,0),
+    bars:[{vals:M.map(m=>V4.ranges[m.m]?null:m.usd),c:C.violet,opAt:i=>M[i].approx?0.6:1,fmt:v=>'US$ '+fmt(v,0)+' MM'}],refs:[{v:V4.avg26,c:C.amber}],whiskers:[{i:M.length-1,lo:rg.lo,hi:rg.hi,c:C.ink2,t:'Octubre: rango según la fuente'}]});
+})();
+/* ---------- implied crawl ---------- */
+(function(){
+  const I=D.implied;
+  document.getElementById('impl-tbl').innerHTML='<thead><tr><th>Reglas</th><th>Ahorro al piso</th><th>Plazo al piso</th></tr></thead><tbody>'+
+    I.rules.map(r=>`<tr><td>${r.rule}</td><td>${fmt(r.savings,0)}% al año</td><td>${fmt(r.term,0)}% al año</td></tr>`).join('')+
+    `<tr><td>Ritmo oficial de octubre, anualizado</td><td colspan="2">${fmt(I.oct_annual,0)}% al año (${fmt(I.oct_pace,1)}% en el mes)</td></tr>`+
+    `<tr><td>Lo que dice el mercado (plazo a 30 días observado, ${dlab(I.market[I.market.length-1].w)})</td><td colspan="2">${fmt(I.market[I.market.length-1].impl,0)}% al año</td></tr></tbody>`;
+  const M=I.market,last=I.rules[I.rules.length-1],prev=I.rules[1];
+  const floorAt=w=>w>='2026-11-01'?[last.savings,last.term]:[prev.savings,prev.term];
+  chart(document.getElementById('ch-impl'),{x:M.map(m=>m.w),xlab:dlab,every:2,ymin:20,ymax:100,ticks:[20,40,60,80,100],yfmt:v=>v+'%',h:200,
+    lines:[{c:C.cyan,dots:true,vals:M.map(m=>m.impl)},{c:C.amber,dash:'5 3',vals:M.map(m=>floorAt(m.w)[0])},{c:C.amber,vals:M.map(m=>floorAt(m.w)[1])}],refs:[{v:I.oct_annual,c:C.ink2,t:'octubre'}]});
+})();
+/* ---------- daily rates ---------- */
+(function(){
+  const R=D.rates.filter(r=>r.d>='2026-09-08');
+  const fl=d=>d>='2026-11-01'?[15,47,51]:d>='2026-09-15'?[10,42,46]:[null,32,36];
+  chart(document.getElementById('ch-tasas'),{x:R.map(r=>r.d),xlab:dlab,every:8,ymin:0,ymax:100,ticks:[0,20,40,60,80,100],yfmt:v=>v+'%',
+    lines:[{c:C.amber,w:1.2,dash:'4 3',vals:R.map(r=>fl(r.d)[2])},{c:C.amber,w:1.2,dash:'4 3',vals:R.map(r=>fl(r.d)[1])},{c:C.amber,w:1.2,dash:'4 3',vals:R.map(r=>fl(r.d)[0])},
+      {c:C.rose,vals:R.map(r=>r.ccr)},{c:C.violet,vals:R.map(r=>r.sav)},{c:C.cyan,join:true,vals:R.map(r=>r.t30)}]});
+  const l=R[R.length-1];
+  document.getElementById('tasas-note').innerHTML=`Al ${dlab(l.d)} (provisional): ahorro ${fmt(l.sav)}% y cuentas remuneradas ${fmt(l.ccr)}%, justo en el piso; plazo a 30 días ${fmt(l.t30)}%, sobre su piso de 51%, contra un promedio de ${fmt(D.implied.market[D.implied.market.length-2].t30)}% la semana del 30 de octubre: la primera reacción de los bancos puede ser pagar menos por encima del piso. BCV, cuadro 1.1.6 diario.`;
+})();
+/* ---------- crawl vs inflation ---------- */
+(function(){
+  const M=D.crawl.filter(m=>m.m>='2025-07');
+  chart(document.getElementById('ch-ancla'),{x:M.map(m=>m.m),xlab:mlab,every:2,ymin:0,ymax:35,ticks:[0,10,20,30],yfmt:v=>v+'%',
+    bars:[{vals:M.map(m=>m.crawl),c:C.cyan,name:'dólar oficial',opAt:i=>i===M.length-1?0.55:1},{vals:M.map(m=>m.infl),c:C.amber,name:'inflación'}]});
+  const o=M.find(m=>m.m==='2026-10'),mt=D.crawl_mtd;
+  document.getElementById('ancla-note').innerHTML=`Octubre: dólar oficial ${sgn(o.crawl)}% y precios ${sgn(o.infl)}%. Noviembre, ${mt.days} días: ${sgn(mt.pct,1)}% (Bs ${fmt(mt.rate,2)} el ${dlab(mt.last)}; barra clara, mes incompleto). Cuando los precios suben más que el dólar oficial, las cosas se encarecen en dólares: las ventas de quien cobra en dólares sufren, y el margen de quien importa a tasa oficial se aprieta.`;
+})();
+</script>
+
+</body></html>
